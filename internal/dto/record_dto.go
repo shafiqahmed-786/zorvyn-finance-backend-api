@@ -7,3 +7,11 @@ type CreateRecordRequest struct {
     Date     string  `json:"date"`
     Notes    string  `json:"notes"`
 }
+
+type UpdateRecordRequest struct {
+	Amount   float64 `json:"amount"`
+	Type     string  `json:"type"`
+	Category string  `json:"category"`
+	Date     string  `json:"date"`
+	Notes    string  `json:"notes"`
+}

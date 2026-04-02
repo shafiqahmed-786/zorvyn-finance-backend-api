@@ -123,6 +123,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/records/{id}": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Records"
+                ],
+                "summary": "Update financial record",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Record ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update payload",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateRecordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.FinancialRecord"
+                        }
+                    }
+                }
+            }
+        },
         "/api/register": {
             "post": {
                 "description": "Register user with role",
@@ -227,6 +267,26 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "role": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UpdateRecordRequest": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "type": {
                     "type": "string"
                 }
             }

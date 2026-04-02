@@ -47,6 +47,7 @@ func Setup(app *fiber.App, db *gorm.DB, cfg *config.Config) {
 	records := api.Group("/records", middleware.Protected(cfg.JWTSecret))
 	records.Get("/", middleware.RequireRoles("admin", "analyst", "viewer"), recordHandler.GetAll)
 	records.Post("/", middleware.RequireRoles("admin"), recordHandler.Create)
+	records.Put("/:id", middleware.RequireRoles("admin"), recordHandler.Update)
 	records.Delete("/:id", middleware.RequireRoles("admin"), recordHandler.Delete)
 
 	// dashboard analytics routes

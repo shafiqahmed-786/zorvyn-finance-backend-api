@@ -1,9 +1,12 @@
 package services
 
 import (
-    "finance-backend/internal/models"
+	"time"
 
-    "gorm.io/gorm"
+	"finance-backend/internal/dto"
+	"finance-backend/internal/models"
+
+	"gorm.io/gorm"
 )
 
 type RecordService struct {
@@ -34,4 +37,30 @@ func (s *RecordService) SoftDelete(id string) error {
 
 func (s *RecordService) CreateAudit(log *models.AuditLog) error {
     return s.DB.Create(log).Error
+}
+
+func (s *RecordService) Update(id string, req dto.UpdateRecordRequest) (*models.FinancialRecord, error) {
+	var record models.FinancialRecord
+
+	if err := s.DB.First(&record, "id = ?", id).Error; err != nil {
+		return nil, err
+	}
+
+	record.Amount = req.Amount
+	record.Type = models.RecordType(req.Type)
+	record.Category = req.Category
+	record.Notes = req.Notes
+
+	if req.Date != "" {
+		parsedDate, err := time.Parse("2006-01-02", req.Date)
+		if err == nil {
+			record.Date = parsedDate
+		}
+	}
+
+	if err := s.DB.Save(&record).Error; err != nil {
+		return nil, err
+	}
+
+	return &record, nil
 }

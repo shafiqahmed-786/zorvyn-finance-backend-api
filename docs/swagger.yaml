@@ -47,6 +47,19 @@ definitions:
       role:
         type: string
     type: object
+  dto.UpdateRecordRequest:
+    properties:
+      amount:
+        type: number
+      category:
+        type: string
+      date:
+        type: string
+      notes:
+        type: string
+      type:
+        type: string
+    type: object
   models.FinancialRecord:
     properties:
       amount:
@@ -178,6 +191,32 @@ paths:
           schema:
             $ref: '#/definitions/models.FinancialRecord'
       summary: Create financial record
+      tags:
+      - Records
+  /api/records/{id}:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Record ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateRecordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.FinancialRecord'
+      summary: Update financial record
       tags:
       - Records
   /api/register:

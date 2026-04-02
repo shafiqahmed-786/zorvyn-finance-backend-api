@@ -64,6 +64,31 @@ func (h *RecordHandler) Create(c *fiber.Ctx) error {
 	return c.JSON(record)
 }
 
+// UpdateRecord godoc
+// @Summary Update financial record
+// @Tags Records
+// @Accept json
+// @Produce json
+// @Param id path string true "Record ID"
+// @Param payload body dto.UpdateRecordRequest true "Update payload"
+// @Success 200 {object} models.FinancialRecord
+// @Router /api/records/{id} [put]
+func (h *RecordHandler) Update(c *fiber.Ctx) error {
+	id := c.Params("id")
+
+	var req dto.UpdateRecordRequest
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(400).JSON(fiber.Map{"error": "invalid input"})
+	}
+
+	record, err := h.Service.Update(id, req)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return c.JSON(record)
+}
+
 // GetAllRecords godoc
 // @Summary Get all records
 // @Tags Records
