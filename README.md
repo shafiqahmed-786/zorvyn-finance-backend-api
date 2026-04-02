@@ -120,7 +120,7 @@ docker-compose up -d
 
 Create .env
 
-PORT=8082
+PORT=8083
 DB_HOST=127.0.0.1
 DB_PORT=5435
 DB_USER=postgres
