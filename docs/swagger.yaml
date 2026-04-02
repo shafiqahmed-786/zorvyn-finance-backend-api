@@ -1,0 +1,210 @@
+basePath: /
+definitions:
+  dto.CreateRecordRequest:
+    properties:
+      amount:
+        type: number
+      category:
+        type: string
+      date:
+        type: string
+      notes:
+        type: string
+      type:
+        type: string
+    type: object
+  dto.DashboardSummaryResponse:
+    properties:
+      category_totals:
+        additionalProperties:
+          format: float64
+          type: number
+        type: object
+      net_balance:
+        type: number
+      recent_count:
+        type: integer
+      total_expense:
+        type: number
+      total_income:
+        type: number
+    type: object
+  dto.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  dto.RegisterRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      role:
+        type: string
+    type: object
+  models.FinancialRecord:
+    properties:
+      amount:
+        type: number
+      category:
+        type: string
+      created_at:
+        type: string
+      date:
+        type: string
+      id:
+        type: string
+      notes:
+        type: string
+      type:
+        $ref: '#/definitions/models.RecordType'
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  models.RecordType:
+    enum:
+    - income
+    - expense
+    type: string
+    x-enum-varnames:
+    - TypeIncome
+    - TypeExpense
+  models.Role:
+    enum:
+    - viewer
+    - analyst
+    - admin
+    type: string
+    x-enum-varnames:
+    - RoleViewer
+    - RoleAnalyst
+    - RoleAdmin
+  models.User:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      is_active:
+        type: boolean
+      name:
+        type: string
+      role:
+        $ref: '#/definitions/models.Role'
+      updated_at:
+        type: string
+    type: object
+host: localhost:8082
+info:
+  contact: {}
+  description: Zorvyn Backend Developer Internship Assignment - Production-grade fintech
+    backend with RBAC, analytics, audit logs, and Swagger docs
+  title: Finance Backend API
+  version: "1.0"
+paths:
+  /api/dashboard/summary:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.DashboardSummaryResponse'
+      summary: Get dashboard summary
+      tags:
+      - Dashboard
+  /api/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Login payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Login user
+      tags:
+      - Auth
+  /api/records:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.FinancialRecord'
+            type: array
+      summary: Get all records
+      tags:
+      - Records
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Record payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateRecordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.FinancialRecord'
+      summary: Create financial record
+      tags:
+      - Records
+  /api/register:
+    post:
+      consumes:
+      - application/json
+      description: Register user with role
+      parameters:
+      - description: Register payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Register a new user
+      tags:
+      - Auth
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -1,0 +1,8 @@
+.env
+air.toml
+tmp/
+bin/
+*.exe
+*.log
+coverage.out
+vendor/
